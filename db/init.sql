@@ -1,0 +1,2 @@
+CREATE TABLE TipsBalanceList (user_id text PRIMARY KEY, tip_balance integer NOT NULL, updated_at TIMESTAMP NOT NULL);
+CREATE TABLE TipsDailyList (user_id text PRIMARY KEY, tip_daily_balance integer NOT NULL, updated_at TIMESTAMP NOT NULL);

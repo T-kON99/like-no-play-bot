@@ -1,0 +1,6 @@
+{
+	"prefix": "*",
+	"defaultTipBalance": 500,
+	"defaultTip": 50,
+	"dailyTipAttempt": 5
+}

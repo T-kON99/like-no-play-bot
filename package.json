@@ -1,0 +1,38 @@
+{
+  "//1": "describes your app and its dependencies",
+  "//2": "https://docs.npmjs.com/files/package.json",
+  "//3": "updating this file will download and update your packages",
+  "name": "likenoplay",
+  "version": "1.0.0",
+  "description": "A bot for tipping DoTA players",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node build/main.js",
+    "debug": "nodemon"
+  },
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "eslint": "^7.26.0",
+    "pg": "^8.6.0"
+  },
+  "engines": {
+    "node": "8.x"
+  },
+  "repository": {
+    "url": "https://github.com/T-kON99/LikeNoPlay-Bot"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "heroku",
+    "DoTA",
+    "discord"
+  ],
+  "devDependencies": {
+    "@types/node": "^15.0.3",
+    "@types/pg": "^7.14.11",
+    "nodemon": "^2.0.7",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  }
+}
