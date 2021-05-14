@@ -1,3 +1,4 @@
+// @ts-ignore
 const conf = import("../secret.json").then((secret) => {
     return {
         TOKEN: secret.token,
