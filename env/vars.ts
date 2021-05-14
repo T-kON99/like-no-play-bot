@@ -14,8 +14,8 @@ const conf = import("../secret.json").then((secret) => {
     return {
         TOKEN: process.env.TOKEN || "",
         DATABASE_URL: process.env.DATABASE_URL || "",
-        DATABASE_NAME: process.env.DATABASE_NAME,
-        DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
+        DATABASE_NAME: process.env.DATABASE_NAME || "",
+        DATABASE_PASSWORD: process.env.DATABASE_PASSWORD || "",
         IS_PRODUCTION: true
     }
 });
