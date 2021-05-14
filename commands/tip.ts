@@ -77,6 +77,9 @@ module.exports = {
                     canTip = newBalance > 0
                     await client.databaseClient.setTipsBalance(sender, newBalance)
                 }
+            } else {
+                // Daily attempt
+                tipCost = config.defaultTip
             }
 
             // Handle receiver tip balance
@@ -92,7 +95,7 @@ module.exports = {
                     var newBalance = receiverTipsRes.Result.tip_balance + tipCost
                     await client.databaseClient.setTipsBalance(receiver, newBalance)
                 }
-                message.channel.send(`${message.author} tipped ${tipCost} to ${receiver}! You have ${freeAttemptToday}/${config.dailyTipAttempt} free tips available`)
+                message.channel.send(`${message.author} tipped ${tipCost} to ${receiver}! You have ${freeAttemptToday}/${config.dailyTipAttempt} free ${config.defaultTip} tips available`)
                 return
             } else {
                 message.channel.send(`${message.author} You don't have enough tip credits!`)
