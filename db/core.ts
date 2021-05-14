@@ -3,6 +3,8 @@ import { env } from "../env/vars";
 import consts from "./consts";
 import Discord from "discord.js";
 import * as config from "../config.json";
+import { timeStamp } from "console";
+import fs from "fs";
 
 interface DBResult<T> {
     Code: number,
@@ -25,31 +27,38 @@ export default class DBClient extends Client {
     public client: Client
     public conf: any
     public isProduction: boolean
+    public initScriptFile: string
     constructor(option?: any) {
         super(option);
         this.client = new Client(option);
         this.conf = option;
         this.isProduction = false;
+        this.initScriptFile = './db/init.sql';
     }
     async init() {
-        this.isProduction = await env.isProd()
-        if (this.isProduction) {
-            this.client = new Client({
-                connectionString: await env.getDatabaseUrl(),
-                ssl: {
-                    rejectUnauthorized: !(await env.isProd()),
-                }
-            })
-        } else if (!this.conf) {
-            this.client = new Client({
-                connectionString: await env.getDatabaseUrl(),
-            })
-        }
-        this.client.connect().then(() => {
+        try {
+            this.isProduction = await env.isProd()
+            if (this.isProduction) {
+                this.client = new Client({
+                    connectionString: await env.getDatabaseUrl(),
+                    ssl: {
+                        rejectUnauthorized: !(await env.isProd()),
+                    }
+                })
+            } else if (!this.conf) {
+                this.client = new Client({
+                    connectionString: await env.getDatabaseUrl(),
+                })
+            }
+            await this.client.connect()
             console.log(`Connected to database host ${this.client.host}`);
-        }).catch((err: Error) => {
-            console.log(`Error connecting to database ${err}`);
-        });
+            var initQuery = (await fs.promises.readFile(this.initScriptFile)).toString()
+            var res = await this.client.query(initQuery);
+            res.rowCount ? console.log(`Created table for database ${await env.getDatabaseUrl()}`) : {}
+        } catch (err) {
+            console.log(`Error initializing connection to database ${err}`);
+            throw err;
+        }
     }
     // TODO: Refactor the duplicate codes to these 2 GET/SET
     async getFromUser(user: Discord.User, table: string, columns: string[]) {
