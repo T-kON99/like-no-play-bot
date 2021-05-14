@@ -40,6 +40,7 @@ module.exports = {
         var isUsingDaily = true
         var canTip = true
         var freeAttemptToday = config.dailyTipAttempt
+        var tipCost = args.length > 1 && !isNaN(parseInt(args[1])) ? parseInt(args[1]) : config.defaultTip
         if (senderId === receiverId) {
             message.channel.send(`${message.author} Please don't tip yourself, just stop.`)
             return
@@ -55,11 +56,12 @@ module.exports = {
             }
             // If sender is a new/old user
             if (!senderAttemptRes.RowsUpdated) {
+                freeAttemptToday--
                 await client.databaseClient.setTodayTipAttempt(sender, config.dailyTipAttempt)
             } else {
                 isUsingDaily = senderAttemptRes.Result.tip_daily_balance > 0
-                freeAttemptToday = senderAttemptRes.Result.tip_daily_balance
-                await client.databaseClient.setTodayTipAttempt(sender, freeAttemptToday - 1)
+                freeAttemptToday = Math.max(senderAttemptRes.Result.tip_daily_balance - 1, 0)
+                await client.databaseClient.setTodayTipAttempt(sender, freeAttemptToday)
             }
             // Handle sender tip balance
             if (!isUsingDaily) {
@@ -69,9 +71,9 @@ module.exports = {
                     return
                 }
                 if (senderTipsRes.Code === consts.Codes.SuccessRecord && !senderTipsRes.RowsUpdated) {
-                    await client.databaseClient.setTipsBalance(sender, config.defaultTipBalance - config.defaultTip)
+                    await client.databaseClient.setTipsBalance(sender, config.defaultTipBalance - tipCost)
                 } else {
-                    var newBalance = senderTipsRes.Result.tip_balance - config.defaultTip
+                    var newBalance = senderTipsRes.Result.tip_balance - tipCost
                     canTip = newBalance > 0
                     await client.databaseClient.setTipsBalance(sender, newBalance)
                 }
@@ -85,12 +87,12 @@ module.exports = {
                     return
                 }
                 if (receiverTipsRes.Code === consts.Codes.SuccessRecord && !receiverTipsRes.RowsUpdated) {
-                    await client.databaseClient.setTipsBalance(receiver, config.defaultTipBalance + config.defaultTip)
+                    await client.databaseClient.setTipsBalance(receiver, config.defaultTipBalance + tipCost)
                 } else {
-                    var newBalance = receiverTipsRes.Result.tip_balance + config.defaultTip
+                    var newBalance = receiverTipsRes.Result.tip_balance + tipCost
                     await client.databaseClient.setTipsBalance(receiver, newBalance)
                 }
-                message.channel.send(`${message.author} tipped ${config.defaultTip} to ${receiver}! You have ${freeAttemptToday}/${config.dailyTipAttempt} free tips available`)
+                message.channel.send(`${message.author} tipped ${tipCost} to ${receiver}! You have ${freeAttemptToday}/${config.dailyTipAttempt} free tips available`)
                 return
             } else {
                 message.channel.send(`${message.author} You don't have enough tip credits!`)
