@@ -8,6 +8,7 @@
   "main": "bot.js",
   "scripts": {
     "start": "node build/main.js",
+    "postinstall": "tsc",
     "debug": "nodemon"
   },
   "dependencies": {
