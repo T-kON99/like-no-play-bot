@@ -1,8 +1,8 @@
-# Kanel
-A discord bot, pickup lines
+# LikeNoPlay
+Show your toxicity
 ------------
 
-`k!pickup` to get pickup lines
+`*tip` to tip his/her toxicity
 
 -------------------
 
