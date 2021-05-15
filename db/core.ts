@@ -209,7 +209,7 @@ export default class DBClient extends Client {
             var dbRes = await this.getTodayTipAttempt(user)
             if (dbRes.Code === consts.Codes.SuccessRecord && !dbRes.RowsUpdated) {
                 console.log(`Inserting tips today attempt record ${tableName} for user ${user.id}, value ${value}`);
-                res = await this.client.query(`INSERT INTO ${tableName} (user_id, tip_daily_balance, updated_at) VALUES ('${user.id}', ${value}, to_timestamp(${Date.now()}/1000.0))`)
+                res = await this.client.query(`INSERT INTO ${tableName} (user_id, tip_daily_balance, updated_at) VALUES ('${user.id}', ${value}, to_timestamp(${Date.now()}/1000.0)) ON CONFLICT (user_id) DO UPDATE SET tip_daily_balance=${value}, updated_at=to_timestamp(${Date.now()}/1000.0)`)
                 return {
                     Code: consts.Codes.SuccessRecord,
                     Message: "",
