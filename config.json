@@ -2,5 +2,6 @@
 	"prefix": "*",
 	"defaultTipBalance": 500,
 	"defaultTip": 50,
-	"dailyTipAttempt": 5
+	"dailyTipAttempt": 5,
+	"assetDir": "./assets"
 }
