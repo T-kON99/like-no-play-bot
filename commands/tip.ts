@@ -28,7 +28,9 @@ module.exports = {
             return
         }
         var userMention = args[0]
-        const userRegex = new RegExp(`<@!([0-9]+)>`);
+        // For user format, refer below
+        // https://discord.com/developers/docs/reference#message-formatting
+        const userRegex = new RegExp(`<@!?([0-9]+)>`);
         if (!userMention.match(userRegex)) {
             console.log(`Invalid user ${userMention}`);
             message.channel.send(`${message.author} Can't tip non-existent toxic player, please make sure the user mentioned is a real toxic player`);
