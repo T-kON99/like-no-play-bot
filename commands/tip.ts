@@ -36,7 +36,7 @@ module.exports = {
             message.channel.send(`${message.author} Can't tip non-existent toxic player, please make sure the user mentioned is a real toxic player`);
             return
         }
-
+        // TestComment
         var senderId = message.author.id;
         var receiverId = userMention.match(userRegex)![1];
         var isUsingDaily = true
